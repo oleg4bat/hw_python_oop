@@ -1,4 +1,4 @@
-from typing import Dict, Type
+from typing import Dict, Type, List, Tuple, Optional
 
 
 class InfoMessage:
@@ -66,13 +66,6 @@ class Running(Training):
     """Тренировка: бег."""
     CALORIES_MEAN_SPEED_MULTIPLIER: int = 18
     CALORIES_MEAN_SPEED_SHIFT: float = 1.79
-
-    def __init__(self,
-                 action: int,
-                 duration: float,
-                 weight: float,
-                 ) -> None:
-        super().__init__(action, duration, weight)
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
@@ -152,9 +145,9 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    code_type_dict: Dict[str] = {'SWM': Swimming,
-                                 'RUN': Running,
-                                 'WLK': SportsWalking}
+    code_type_dict: Dict[str, Type[Training]] = {'SWM': Swimming,
+                                                 'RUN': Running,
+                                                 'WLK': SportsWalking}
     return code_type_dict[workout_type](*data)
 
 
@@ -165,7 +158,7 @@ def main(training: Training) -> None:
 
 
 if __name__ == '__main__':
-    packages: Dict[str, Type[Training]] = [
+    packages: List[Tuple[str, List[Optional[int]]]] = [
         ('SWM', [720, 1, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
         ('WLK', [9000, 1, 75, 180]),
